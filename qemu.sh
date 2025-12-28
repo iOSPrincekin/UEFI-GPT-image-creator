@@ -1,6 +1,28 @@
 #!/bin/sh
 
 # Sendin' Out a TEST O S
+# Build QEMU command
+QEMU_CMD="qemu-system-x86_64 \\
+-drive format=raw,file=test.hdd \\
+-bios bios64.bin \\
+-m 256M \\
+-vga std \\
+-name TESTOS \\
+-machine q35 \\
+-usb \\
+-device usb-mouse \\
+-rtc base=localtime \\
+-net none"
+
+# Print detailed command
+echo "=========================================="
+echo "Executing QEMU with the following command:"
+echo "=========================================="
+echo "$QEMU_CMD"
+echo "=========================================="
+echo ""
+
+# Execute QEMU
 qemu-system-x86_64 \
 -drive format=raw,file=test.hdd \
 -bios bios64.bin \
