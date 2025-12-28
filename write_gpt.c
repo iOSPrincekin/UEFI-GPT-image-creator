@@ -3,7 +3,12 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <time.h>
-#include <uchar.h> 
+// uchar.h may not be available on all systems (e.g., macOS)
+// char16_t is used for UCS-2/UTF-16 strings in UEFI, which is essentially uint16_t
+#ifndef _CHAR16_T
+#define _CHAR16_T
+typedef uint16_t char16_t;
+#endif
 #include <string.h>
 #include <inttypes.h>
 #include <ctype.h>
