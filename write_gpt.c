@@ -962,7 +962,7 @@ bool add_file_to_data_partition(char *filepath, FILE *image) {
            filepath);
 
     // Add to info file for each file added 
-    char info_file[12] = "FILE.TXT"; // "Data (partition) files info"
+    char info_file[12] = "DATAFLS.INF"; // "Data (partition) files info"
 
     if (!opened_info_file) {
         opened_info_file = true;
@@ -1505,6 +1505,24 @@ int main(int argc, char *argv[]) {
             free(options.data_files[i]);
         }
         free(options.data_files);
+
+        // Handle "DATAFLS.INF" for ESP
+        char info_file[12] = "DATAFLS.INF"; // "Data (partition) files info"
+        char info_path[25] = { 0 };
+        strcpy(info_path, "/EFI/BOOT/DATAFLS.INF");
+        fp = fopen(info_file, "rb");
+        if (!fp) {
+            fprintf(stderr, "ERROR: Could not open '%s'\n", info_file);
+            fclose(image);
+            return EXIT_FAILURE;
+        }
+        if (!add_path_to_esp(info_path, fp, image)) {
+            fprintf(stderr, "ERROR: Could not add '%s' to ESP\n", info_path);
+            fclose(fp);
+            fclose(image);
+            return EXIT_FAILURE;
+        }
+        fclose(fp);
     }
 
     // Pad file to next 4KiB aligned size
